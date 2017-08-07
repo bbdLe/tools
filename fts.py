@@ -118,7 +118,7 @@ def threadfunc2():
         if start_flag == True:
             i += 1
             print("{0} second : {1} times succ, {2} times fail, {3} total times".format(i, succ_count - last_succ_count, fail_count - last_fail_count, succ_count))
-            print("Average process time : {0} second".format(i / succ_count))
+            print("Average process time : %.4f second" %(i / succ_count))
         last_succ_count = succ_count
         last_fail_count = fail_count
         
