@@ -20,6 +20,7 @@ lock = threading.Lock()
 url_lists = None
 glb_url = "http://www.baidu.com"
 glb_time = 100
+start_flag = False
 
 async def get_page(urls):
     global succ_count
@@ -108,15 +109,21 @@ def threadfunc2():
     global last_succ_count
     global last_fail_count
     global lock
+    global start_flag
     i = 0
     while True:
         lock.acquire()
-        print("{0} second : {1} times succ, {2} times fail, {3} total times".format(i, succ_count - last_succ_count, fail_count - last_fail_count, succ_count))
+        if start_flag == False and succ_count != 0:
+            start_flag = True
+        if start_flag == True:
+            i += 1
+            print("{0} second : {1} times succ, {2} times fail, {3} total times".format(i, succ_count - last_succ_count, fail_count - last_fail_count, succ_count))
+            print("Average process time : {0} second".format(i / succ_count))
         last_succ_count = succ_count
         last_fail_count = fail_count
+        
         lock.release()
         time.sleep(1)
-        i += 1
 
 def main():
     global threadnums
@@ -172,8 +179,7 @@ def main():
             t.join()
     except KeyboardInterrupt:
         print("stop")
-        exit()    
-
+        exit()
 def usage():
     print(u"""
     -h / --help:
