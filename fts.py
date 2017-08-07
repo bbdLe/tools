@@ -167,8 +167,12 @@ def main():
         t.setDaemon(True)
         t.start()
 
-    for t in threads:
-        t.join()
+    try:
+        for t in threads:
+            t.join()
+    except KeyboardInterrupt:
+        print("stop")
+        exit()    
 
 def usage():
     print(u"""
