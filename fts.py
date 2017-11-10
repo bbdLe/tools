@@ -37,20 +37,24 @@ async def get_page(urls):
         for url in urls:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as resp:
+                    lock.acquire()	
                     if resp.status == 200:
                         local_count.succ_count += 1
                     else:
                         local_count.fail_count += 1
+                    lock.release()
     else:
         i = glb_time
         while i > 0:
             async with aiohttp.ClientSession() as session:
                 async with session.get(urls[0]) as resp:
+                    lock.acquire()
                     if resp.status == 200:
                         local_count.succ_count += 1
                     else:
                         local_count.fail_count += 1
                     i -= 1
+                    lock.release()
 
 @asyncio.coroutine
 def monitor():
